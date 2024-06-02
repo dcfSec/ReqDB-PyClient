@@ -13,22 +13,24 @@ class ExtraEntry(Base):
 
 
 class ExtraType(Base):
-    def __init__(self, title: str, description: str, extraType: int, children: list[int] = [], id: int = 0):
+    def __init__(self, title: str, description: str, extraType: int, children: list[dict] = [], id: int = 0):
         super().__init__(id)
         self.title: str = title
         self.description: str = description
         self.extraType: int = extraType
-        self.children: list[int] = children
+        self.children: list[dict] = children
 
 
 class Requirement(Base):
-    def __init__(self, key: str, title: str, description: str, parentId: int = None, visible: bool = True, id: int = 0):
+    def __init__(self, key: str, title: str, description: str, tags: list[dict], parent: dict = None, visible: bool = True, id: int = 0):
         super().__init__(id)
         self.key: str = key
         self.title: str = title
         self.description: str = description
         self.visible: bool = visible
-        self.parentId: int = parentId
+        self.tags: list = tags
+        self.parent: dict = parent
+        self.parentId: int = parent["id"] if parent is not None else None
 
 
 class Tag(Base):
@@ -39,16 +41,20 @@ class Tag(Base):
 
 
 class Topic(Base):
-    def __init__(self, key: str, title: str, description: str, parentId: int = None, id: int = 0):
+    def __init__(self, key: str, title: str, description: str, parent: int = None, id: int = 0):
         super().__init__(id)
         self.key: str = key
         self.title: str = title
         self.description: str = description
-        self.parentId: int = parentId
+        self.parent: int = parent
+        if parent is not None:
+            print(parent["id"])
+        self.parentId: int = parent["id"] if parent is not None else None
 
 
 class Catalogue(Base):
-    def __init__(self, title: str, topics: str, id: int = None):
-        super.__init__(id)
+    def __init__(self, title: str, description: str, topics: str, id: int = None):
+        super().__init__(id)
         self.title: str = title
+        self.description: str = description
         self.topics: str = topics

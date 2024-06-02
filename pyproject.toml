@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "reqdb-pyclient"
+name = "reqdb"
 version = "0.1.0"
 description = "Python API client for ReqDB"
 authors = ["dcfSec <contributor@dcfsec.com>"]

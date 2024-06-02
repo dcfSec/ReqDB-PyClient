@@ -90,5 +90,6 @@ class CatalogueSchema(BaseSchema):
         unknown = EXCLUDE
 
     title = fields.String(validate=validate.Length(min=1, max=200))
-    topics = fields.Nested(nested='TopicSchema', only=['id'],
+    description = fields.String(validate=validate.Length(min=1))
+    topics = fields.Nested(nested='TopicSchema', only=['id', 'title'],
                            many=True)

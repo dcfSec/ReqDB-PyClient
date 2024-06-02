@@ -19,7 +19,6 @@ class ReqDB:
 
         @classmethod
         def get(cls, id):
-            print(__class__)
             return ReqDB.api.get(f"{cls.endpoint}/{id}")
 
         @classmethod
@@ -41,7 +40,12 @@ class ReqDB:
             if not isinstance(data, cls.model):
                 raise TypeError(f"Data not the correct model ({cls.model.__name__})")
             print(data)
-            return ReqDB.api.add(f"{cls.endpoint}", cls.schema.dump(data))
+            if hasattr(data, "parentId"):
+                print("In Parent:", data.parentId)
+            r = ReqDB.api.add(f"{cls.endpoint}", cls.schema.dump(data))
+            if "parentId" in r:
+                print("Out Parent:", r["parentId"])
+            return r
 
     class Tags(Entity):
         endpoint = "tags"
@@ -64,7 +68,7 @@ class ReqDB:
         model = ExtraType
 
     class ExtraEntries(Entity):
-        endpoint = "extraEntry"
+        endpoint = "extraEntries"
         schema = ExtraEntrySchema()
         model = ExtraEntry
 
