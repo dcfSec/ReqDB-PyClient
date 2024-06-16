@@ -91,5 +91,5 @@ class CatalogueSchema(BaseSchema):
 
     title = fields.String(validate=validate.Length(min=1, max=200))
     description = fields.String(validate=validate.Length(min=1))
-    topics = fields.Nested(nested='TopicSchema', only=['id', 'title'],
+    topics = fields.Nested(nested='TopicSchema', only=['id'],
                            many=True)
