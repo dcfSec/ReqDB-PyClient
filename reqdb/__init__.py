@@ -39,12 +39,7 @@ class ReqDB:
         def add(cls, data: Base):
             if not isinstance(data, cls.model):
                 raise TypeError(f"Data not the correct model ({cls.model.__name__})")
-            print(data)
-            if hasattr(data, "parentId"):
-                print("In Parent:", data.parentId)
             r = ReqDB.api.add(f"{cls.endpoint}", cls.schema.dump(data))
-            if "parentId" in r:
-                print("Out Parent:", r["parentId"])
             return r
 
     class Tags(Entity):

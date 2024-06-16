@@ -20,7 +20,6 @@ class API:
         elif response.status_code == 204:
             return True
         else:
-            print(response.text)
             raise RuntimeError(response.json())
 
     def get(self, endpoint: str) -> dict:
@@ -36,7 +35,5 @@ class API:
         return API.handleResponse(response)
 
     def add(self, endpoint: str, data: dict) -> dict:
-        if "parentId" in data:
-            print("Schema Parent:", data["parentId"])
         response = requests.post(f"{self.baseURL}/{endpoint}", headers=self.headers, json=data)
         return API.handleResponse(response)

@@ -47,8 +47,6 @@ class Topic(Base):
         self.title: str = title
         self.description: str = description
         self.parent: int = parent
-        if parent is not None:
-            print(parent["id"])
         self.parentId: int = parent["id"] if parent is not None else None
 
 
