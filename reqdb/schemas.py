@@ -1,4 +1,7 @@
-from marshmallow import EXCLUDE, validate, Schema, fields
+from marshmallow import EXCLUDE, validate, Schema, fields, post_load
+
+from reqdb.models import Tag, Topic, \
+    Requirement, ExtraType, ExtraEntry, Catalogue, Comment
 
 
 class BaseSchema(Schema):
@@ -16,6 +19,10 @@ class ExtraEntrySchema(BaseSchema):
     extraTypeId = fields.Integer()
     requirementId = fields.Integer()
 
+    @post_load
+    def make_object(self, data, **kwargs):
+        return ExtraEntry(**data)
+
 
 class ExtraTypeSchema(BaseSchema):
     class Meta:
@@ -27,6 +34,10 @@ class ExtraTypeSchema(BaseSchema):
     description = fields.String(validate=validate.Length(min=1))
     extraType = fields.Integer(validate=validate.Range(min=1, max=3))
     children = fields.List(fields.Nested(nested='ExtraEntrySchema', only=['id']))
+
+    @post_load
+    def make_object(self, data, **kwargs):
+        return ExtraType(**data)
 
 
 class RequirementSchema(BaseSchema):
@@ -46,6 +57,10 @@ class RequirementSchema(BaseSchema):
         nested='ExtraEntrySchema', only=['id']))
     parent = fields.Nested(nested='TopicSchema', only=['id'])
 
+    @post_load
+    def make_object(self, data, **kwargs):
+        return Requirement(**data)
+
 
 class TagSchema(BaseSchema):
     class Meta:
@@ -57,6 +72,10 @@ class TagSchema(BaseSchema):
     name = fields.String(validate=validate.Length(min=1, max=50))
     requirement = fields.Nested(nested='RequirementSchema', only=['id'],
                                 many=True)
+
+    @post_load
+    def make_object(self, data, **kwargs):
+        return Tag(**data)
 
 
 class TopicSchema(BaseSchema):
@@ -78,6 +97,10 @@ class TopicSchema(BaseSchema):
                            only=['id'], allow_none=True)
     catalogues = fields.List(fields.Integer(allow_none=True))
 
+    @post_load
+    def make_object(self, data, **kwargs):
+        return Topic(**data)
+
 
 class CatalogueSchema(BaseSchema):
     """
@@ -93,3 +116,24 @@ class CatalogueSchema(BaseSchema):
     description = fields.String(validate=validate.Length(min=1))
     topics = fields.Nested(nested='TopicSchema', only=['id'],
                            many=True)
+
+    @post_load
+    def make_object(self, data, **kwargs):
+        return Catalogue(**data)
+
+class CommentSchema(BaseSchema):
+    """
+    Comment schema
+    """
+    class Meta:
+        include_relationships = True
+        load_instance = True
+        include_fk = True
+        unknown = EXCLUDE
+
+    comment = fields.String(validate=validate.Length(min=1), required=True)
+    requirementId = fields.Integer(required=True)
+
+    @post_load
+    def make_object(self, data, **kwargs):
+        return Comment(**data)

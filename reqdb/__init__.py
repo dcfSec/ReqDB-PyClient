@@ -1,8 +1,8 @@
 from reqdb.api import API
 from reqdb.schemas import BaseSchema, TagSchema, TopicSchema, \
-    RequirementSchema, ExtraTypeSchema, ExtraEntrySchema, CatalogueSchema
+    RequirementSchema, ExtraTypeSchema, ExtraEntrySchema, CatalogueSchema, CommentSchema
 from reqdb.models import Base, Tag, Topic, \
-    Requirement, ExtraType, ExtraEntry, Catalogue
+    Requirement, ExtraType, ExtraEntry, Catalogue, Comment
 
 
 class ReqDB:
@@ -71,6 +71,11 @@ class ReqDB:
         endpoint = "catalogues"
         schema = CatalogueSchema()
         model = Catalogue
+
+    class Comment(Entity):
+        endpoint = "comments"
+        schema = CommentSchema()
+        model = Comment
 
     class Coffee(Entity):
         endpoint = "coffee"
