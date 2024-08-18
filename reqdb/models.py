@@ -21,7 +21,7 @@ class ExtraEntry(Base):
     """
     ExtraEntry object. Represents an ExtraEntry.
 
-    :param Base: Base mnodel
+    :param Base: Base model
     :type Base: Base
     """
 
