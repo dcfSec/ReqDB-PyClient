@@ -3,8 +3,11 @@ from msal import PublicClientApplication
 
 clientID = getenv("REQDB_CLIENT_CLIENT_ID")
 scopes = [
-    f"api://{clientID}/ReqDB.Reader",
-    f"api://{clientID}/ReqDB.Writer"
+    f"api://{clientID}/ReqDB.Requirements.Reader",
+    f"api://{clientID}/ReqDB.Requirements.Writer",
+    f"api://{clientID}/ReqDB.Comments.Reader",
+    f"api://{clientID}/ReqDB.Comments.Writer",
+    f"api://{clientID}/ReqDB.Comments.Moderator",
 ]
 app = PublicClientApplication(
     clientID,
