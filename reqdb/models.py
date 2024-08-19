@@ -158,6 +158,7 @@ class Comment(Base):
     :param Base: Base model
     :type Base: Base
     """
-    def __init__(self, comment: str, requirementId: int):
+    def __init__(self, comment: str, requirementId: int, completed: bool = False):
         self.comment: str = comment
         self.requirementId: int = requirementId
+        self.completed: bool = completed

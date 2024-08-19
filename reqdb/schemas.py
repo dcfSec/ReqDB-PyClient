@@ -133,6 +133,7 @@ class CommentSchema(BaseSchema):
 
     comment = fields.String(validate=validate.Length(min=1), required=True)
     requirementId = fields.Integer(required=True)
+    completed = fields.Boolean()
 
     @post_load
     def make_object(self, data, **kwargs):
