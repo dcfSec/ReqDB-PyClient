@@ -80,7 +80,7 @@ class Requirement(Base):
     :param Base: Base model
     :type Base: Base
     """
-    def __init__(self, key: str, title: str, description: str, tags: list[dict], parent: dict = None, visible: bool = True, id: int = None):
+    def __init__(self, key: str, title: str, description: str, tags: list[dict] = [], parent: dict = None, visible: bool = True, id: int = None):
         """
         Constructor for a requirement
 
