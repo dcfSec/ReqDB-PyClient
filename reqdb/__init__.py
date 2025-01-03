@@ -32,8 +32,8 @@ class ReqDB:
             return ReqDB.api.update(f"{cls.endpoint}/{id}", cls.schema.dump(data))
 
         @classmethod
-        def delete(cls, id: int) -> dict|bool:
-            return ReqDB.api.delete(f"{cls.endpoint}/{id}")
+        def delete(cls, id: int, force: bool = False, cascade: bool = False) -> dict|bool:
+            return ReqDB.api.delete(f"{cls.endpoint}/{id}", force, cascade)
 
         @classmethod
         def add(cls, data: Base) -> dict|bool:

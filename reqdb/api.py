@@ -30,8 +30,15 @@ class API:
         response = requests.put(f"{self.baseURL}/{endpoint}", headers=self.headers, json=data)
         return API.handleResponse(response)
 
-    def delete(self, endpoint: str) -> dict|bool:
-        response = requests.delete(f"{self.baseURL}/{endpoint}", headers=self.headers)
+    def delete(self, endpoint: str, force: bool = False, cascade: bool = False) -> dict|bool:
+        if not force and cascade:
+            raise ValueError("Cascade can only be true when force is also true")
+        parameters = ""
+        if force:
+            parameters += "?force"
+            if cascade:
+                parameters += "&cascade"
+        response = requests.delete(f"{self.baseURL}/{endpoint}{parameters}", headers=self.headers)
         return API.handleResponse(response)
 
     def add(self, endpoint: str, data: dict) -> dict|bool:
