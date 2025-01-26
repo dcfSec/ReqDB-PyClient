@@ -27,7 +27,7 @@ class API:
         return API.handleResponse(response)
 
     def update(self, endpoint: str, data: dict) -> dict|bool:
-        response = requests.put(f"{self.baseURL}/{endpoint}", headers=self.headers, json=data)
+        response = requests.patch(f"{self.baseURL}/{endpoint}", headers=self.headers, json=data)
         return API.handleResponse(response)
 
     def delete(self, endpoint: str, force: bool = False, cascade: bool = False) -> dict|bool:
@@ -42,5 +42,5 @@ class API:
         return API.handleResponse(response)
 
     def add(self, endpoint: str, data: dict) -> dict|bool:
-        response = requests.patch(f"{self.baseURL}/{endpoint}", headers=self.headers, json=data)
+        response = requests.post(f"{self.baseURL}/{endpoint}", headers=self.headers, json=data)
         return API.handleResponse(response)
