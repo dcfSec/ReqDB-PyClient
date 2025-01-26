@@ -35,12 +35,12 @@ class API:
             raise ValueError("Cascade can only be true when force is also true")
         parameters = ""
         if force:
-            parameters += "?force"
+            parameters += "?force=true"
             if cascade:
-                parameters += "&cascade"
+                parameters += "&cascade=true"
         response = requests.delete(f"{self.baseURL}/{endpoint}{parameters}", headers=self.headers)
         return API.handleResponse(response)
 
     def add(self, endpoint: str, data: dict) -> dict|bool:
-        response = requests.post(f"{self.baseURL}/{endpoint}", headers=self.headers, json=data)
+        response = requests.patch(f"{self.baseURL}/{endpoint}", headers=self.headers, json=data)
         return API.handleResponse(response)
