@@ -162,3 +162,15 @@ class Comment(Base):
         self.comment: str = comment
         self.requirementId: int = requirementId
         self.completed: bool = completed
+
+class Configuration(Base):
+    """
+    Comment object. Represents a comment
+
+    :param Base: Base model
+    :type Base: Base
+    """
+    def __init__(self, key: str, value: str):
+        self.key: str = key
+        self.value: str = value
+

@@ -114,3 +114,16 @@ class ReqDB:
         @classmethod
         def add(cls, data: Base):
             raise NotImplementedError
+
+    class Configuration(Entity):
+        endpoint = "config"
+        schema = None
+        model = None
+
+        @classmethod
+        def delete(cls, id):
+            raise NotImplementedError
+
+        @classmethod
+        def add(cls, data: Base):
+            raise NotImplementedError

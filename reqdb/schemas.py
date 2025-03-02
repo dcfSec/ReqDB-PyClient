@@ -1,6 +1,6 @@
 from marshmallow import EXCLUDE, validate, Schema, fields, post_load
 
-from reqdb.models import Tag, Topic, \
+from reqdb.models import Configuration, Tag, Topic, \
     Requirement, ExtraType, ExtraEntry, Catalogue, Comment
 
 
@@ -138,3 +138,20 @@ class CommentSchema(BaseSchema):
     @post_load
     def make_object(self, data, **kwargs):
         return Comment(**data)
+
+class ConfigurationSchema(BaseSchema):
+    """
+    Configuration schema
+    """
+    class Meta:
+        include_relationships = True
+        load_instance = True
+        include_fk = True
+        unknown = EXCLUDE
+
+    key = fields.String(required=True)
+    value = fields.String(required=True)
+
+    @post_load
+    def make_object(self, data, **kwargs):
+        return Configuration(**data)
