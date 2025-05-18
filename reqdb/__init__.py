@@ -9,117 +9,264 @@ from reqdb.models import (
     Requirement,
     Tag,
     Topic,
+    User,
 )
 
 
 class ReqDB:
 
-    api = None
+    api: API
 
     def __init__(self, fqdn, bearer, insecure: bool = False) -> None:
         ReqDB.api = API(fqdn, bearer, insecure)
 
-    class Entity:
-        endpoint: str = None
-        model: Base = None
+    class Tags:
+        endpoint: str = "tags"
+        model = Tag
 
         @classmethod
-        def get(cls, id: int) -> dict|bool:
-            return ReqDB.api.get(f"{cls.endpoint}/{id}")
+        def get(cls, id: int) -> Tag:
+            return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
 
         @classmethod
-        def all(cls) -> dict|bool:
-            return ReqDB.api.get(f"{cls.endpoint}")
+        def all(cls) -> list[Tag]:
+            data = ReqDB.api.get(f"{cls.endpoint}")
+            return [cls.model.model_validate(d) for d in data]
 
         @classmethod
-        def update(cls, id: int, data: Base) -> dict|bool:
-            if not isinstance(data, cls.model):
-                raise TypeError(f"Data not the correct model ({cls.model.__name__})")
-            return ReqDB.api.update(f"{cls.endpoint}/{id}", data.model_dump())
+        def update(cls, id: int, data: Tag) -> Tag:
+            return cls.model.model_validate(
+                ReqDB.api.update(f"{cls.endpoint}/{id}", data)
+            )
 
         @classmethod
-        def delete(cls, id: int, force: bool = False, cascade: bool = False) -> dict|bool:
+        def delete(cls, id: int, force: bool = False, cascade: bool = False) -> bool:
             return ReqDB.api.delete(f"{cls.endpoint}/{id}", force, cascade)
 
         @classmethod
-        def add(cls, data: Base) -> dict|bool:
-            if not isinstance(data, cls.model):
-                raise TypeError(f"Data not the correct model ({cls.model.__name__})")
-            r = ReqDB.api.add(f"{cls.endpoint}", data.model_dump())
-            return r
+        def add(cls, data: Tag) -> Tag:
+            return cls.model.model_validate(ReqDB.api.add(f"{cls.endpoint}", data))
 
-    class Tags(Entity):
-        endpoint = "tags"
-        model = Tag
-
-    class Topics(Entity):
-        endpoint = "topics"
+    class Topics:
+        endpoint: str = "topics"
         model = Topic
 
-    class Requirements(Entity):
-        endpoint = "requirements"
+        @classmethod
+        def get(cls, id: int) -> Topic:
+            return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
+
+        @classmethod
+        def all(cls) -> list[Topic]:
+            data = ReqDB.api.get(f"{cls.endpoint}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
+        def update(cls, id: int, data: Topic) -> Topic:
+            return cls.model.model_validate(
+                ReqDB.api.update(f"{cls.endpoint}/{id}", data)
+            )
+
+        @classmethod
+        def delete(cls, id: int, force: bool = False, cascade: bool = False) -> bool:
+            return ReqDB.api.delete(f"{cls.endpoint}/{id}", force, cascade)
+
+        @classmethod
+        def add(cls, data: Topic) -> Topic:
+            return cls.model.model_validate(ReqDB.api.add(f"{cls.endpoint}", data))
+
+    class Requirements:
+        endpoint: str = "requirements"
         model = Requirement
 
-    class ExtraTypes(Entity):
-        endpoint = "extraTypes"
+        @classmethod
+        def get(cls, id: int) -> Requirement:
+            return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
+
+        @classmethod
+        def all(cls) -> list[Requirement]:
+            data = ReqDB.api.get(f"{cls.endpoint}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
+        def update(cls, id: int, data: Requirement) -> Requirement:
+            return cls.model.model_validate(
+                ReqDB.api.update(f"{cls.endpoint}/{id}", data)
+            )
+
+        @classmethod
+        def delete(cls, id: int, force: bool = False, cascade: bool = False) -> bool:
+            return ReqDB.api.delete(f"{cls.endpoint}/{id}", force, cascade)
+
+        @classmethod
+        def add(cls, data: Requirement) -> Requirement:
+            return cls.model.model_validate(ReqDB.api.add(f"{cls.endpoint}", data))
+
+    class ExtraTypes:
+        endpoint: str = "extraTypes"
         model = ExtraType
 
-    class ExtraEntries(Entity):
-        endpoint = "extraEntries"
+        @classmethod
+        def get(cls, id: int) -> ExtraType:
+            return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
+
+        @classmethod
+        def all(cls) -> list[ExtraType]:
+            data = ReqDB.api.get(f"{cls.endpoint}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
+        def update(cls, id: int, data: ExtraType) -> ExtraType:
+            return cls.model.model_validate(
+                ReqDB.api.update(f"{cls.endpoint}/{id}", data)
+            )
+
+        @classmethod
+        def delete(cls, id: int, force: bool = False, cascade: bool = False) -> bool:
+            return ReqDB.api.delete(f"{cls.endpoint}/{id}", force, cascade)
+
+        @classmethod
+        def add(cls, data: ExtraType) -> ExtraType:
+            return cls.model.model_validate(ReqDB.api.add(f"{cls.endpoint}", data))
+
+    class ExtraEntries:
+        endpoint: str = "extraEntries"
         model = ExtraEntry
 
-    class Catalogues(Entity):
-        endpoint = "catalogues"
+        @classmethod
+        def get(cls, id: int) -> ExtraEntry:
+            return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
+
+        @classmethod
+        def all(cls) -> list[ExtraEntry]:
+            data = ReqDB.api.get(f"{cls.endpoint}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
+        def update(cls, id: int, data: ExtraEntry) -> ExtraEntry:
+            return cls.model.model_validate(
+                ReqDB.api.update(f"{cls.endpoint}/{id}", data)
+            )
+
+        @classmethod
+        def delete(cls, id: int, force: bool = False, cascade: bool = False) -> bool:
+            return ReqDB.api.delete(f"{cls.endpoint}/{id}", force, cascade)
+
+        @classmethod
+        def add(cls, data: ExtraEntry) -> ExtraEntry:
+            return cls.model.model_validate(ReqDB.api.add(f"{cls.endpoint}", data))
+
+    class Catalogues:
+        endpoint: str = "catalogues"
         model = Catalogue
 
-    class Comment(Entity):
-        endpoint = "comments"
+        @classmethod
+        def get(cls, id: int) -> Catalogue:
+            return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
+
+        @classmethod
+        def all(cls) -> list[Catalogue]:
+            data = ReqDB.api.get(f"{cls.endpoint}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
+        def update(cls, id: int, data: Catalogue) -> Catalogue:
+            return cls.model.model_validate(
+                ReqDB.api.update(f"{cls.endpoint}/{id}", data)
+            )
+
+        @classmethod
+        def delete(cls, id: int, force: bool = False, cascade: bool = False) -> bool:
+            return ReqDB.api.delete(f"{cls.endpoint}/{id}", force, cascade)
+
+        @classmethod
+        def add(cls, data: Catalogue) -> Catalogue:
+            return cls.model.model_validate(ReqDB.api.add(f"{cls.endpoint}", data))
+
+    class Comment:
+        endpoint: str = "comments"
         model = Comment
 
-    class Coffee(Entity):
-        endpoint = "coffee"
-        model = None
+        @classmethod
+        def get(cls, id: int) -> Comment:
+            return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
 
-    class Audit(Entity):
-        endpoint = "audit"
-        model = None
+        @classmethod
+        def all(cls) -> list[Comment]:
+            data = ReqDB.api.get(f"{cls.endpoint}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
+        def update(cls, id: int, data: Comment) -> Comment:
+            return cls.model.model_validate(
+                ReqDB.api.update(f"{cls.endpoint}/{id}", data)
+            )
+
+        @classmethod
+        def delete(cls, id: int, force: bool = False, cascade: bool = False) -> bool:
+            return ReqDB.api.delete(f"{cls.endpoint}/{id}", force, cascade)
+
+        @classmethod
+        def add(cls, data: Comment) -> Comment:
+            return cls.model.model_validate(ReqDB.api.add(f"{cls.endpoint}", data))
+
+    class Audit:
+        endpoint: str = "audit"
 
         @classmethod
         def _targetCheck(cls, obj: str):
-            target = ["extraEntries", "extraTypes", "requirements", "tags", "topics", "catalogues", "comments"]
-            if obj not in ["extraEntries", "extraTypes", "requirements", "tags", "topics", "catalogues", "comments"]:
+            target = [
+                "extraEntries",
+                "extraTypes",
+                "requirements",
+                "tags",
+                "topics",
+                "catalogues",
+                "comments",
+            ]
+            if obj not in [
+                "extraEntries",
+                "extraTypes",
+                "requirements",
+                "tags",
+                "topics",
+                "catalogues",
+                "comments",
+            ]:
                 raise KeyError(f"Audit object can only one of: {', '.join(target)}")
 
         @classmethod
-        def get(cls, obj: str, id: int) -> dict|bool:
+        def get(cls, obj: str, id: int) -> dict:
             cls._targetCheck(obj)
             return ReqDB.api.get(f"{cls.endpoint}/{obj}/{id}")
 
         @classmethod
-        def all(cls, obj: str) -> dict|bool:
+        def all(cls, obj: str) -> dict:
             cls._targetCheck(obj)
             return ReqDB.api.get(f"{cls.endpoint}/{obj}")
 
-        @classmethod
-        def update(cls, id, data: Base):
-            raise NotImplementedError
-
-        @classmethod
-        def delete(cls, id):
-            raise NotImplementedError
-
-        @classmethod
-        def add(cls, data: Base):
-            raise NotImplementedError
-
-    class Configuration(Entity):
-        endpoint = "config"
+    class Configuration:
+        endpoint: str = "config/system"
         model = Configuration
 
         @classmethod
-        def delete(cls, id):
-            raise NotImplementedError
+        def all(cls) -> list[Configuration]:
+            data = ReqDB.api.get(f"{cls.endpoint}")
+            return [cls.model.model_validate(d) for d in data]
 
         @classmethod
-        def add(cls, data: Base):
-            raise NotImplementedError
+        def update(cls, id: str, data: Configuration) -> Configuration:
+            return cls.model.model_validate(
+                ReqDB.api.update(f"{cls.endpoint}/{id}", data)
+            )
+
+    class User:
+        endpoint: str = "config/user"
+        model = User
+
+        @classmethod
+        def get(cls) -> User:
+            return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}"))
+
+        @classmethod
+        def update(cls, data: User) -> User:
+            return cls.model.model_validate(ReqDB.api.update(f"{cls.endpoint}", data))

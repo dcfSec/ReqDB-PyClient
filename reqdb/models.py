@@ -1,24 +1,34 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Base(BaseModel):
-    id: int | None = None
+    id: int = 0
+
 
 class Configuration(BaseModel):
-    key: str | None = None
-    value: str | None = None
+    key: str = ""
+    value: str = ""
 
-class TopicIdOnly(Base):
+
+class TopicIdOnly(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: int
 
-class TagIdOnly(Base):
+
+class TagIdOnly(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: int
 
-class CatalogueIdOnly(Base):
+
+class CatalogueIdOnly(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: int
 
-class RequirementIdOnly(Base):
+
+class RequirementIdOnly(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: int
+
 
 class ExtraEntry(Base):
     content: str = Field(min_length=1)
@@ -37,9 +47,9 @@ class Requirement(Base):
     key: str = Field(max_length=20)
     title: str = Field(max_length=200)
     description: str
-    visible: bool = Field(default=True)
+    visible: bool = True
     parentId: int
-    tags: list["TagIdOnly"] | None = None
+    tags: list["TagIdOnly"] = []
 
 
 class Tag(Base):
@@ -56,16 +66,23 @@ class Topic(Base):
 
 
 class Catalogue(Base):
-    title: str  = Field(min_length=1, max_length=200)
+    title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1)
-    topics: list["TopicIdOnly"] | None = None
-    tags: list["TagIdOnly"] | None = None
+    topics: list["TopicIdOnly"] = []
+    tags: list["TagIdOnly"] = []
 
 
 class Comment(Base):
-    comment: str  = Field(min_length=1)
-    completed: bool | None = None
+    comment: str = Field(min_length=1)
+    completed: bool = False
     requirementId: int
     parentId: int
 
 
+class User(BaseModel):
+    id: str = ""
+    email: str = ""
+    created: float = 0
+    active: bool = True
+    notificationMailOnCommentChain: bool = False
+    notificationMailOnRequirementComment: bool = False
