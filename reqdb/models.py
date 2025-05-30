@@ -51,11 +51,17 @@ class Requirement(Base):
     parentId: int
     tags: list["TagIdOnly"] = []
 
+    def toIdOnly(self) -> RequirementIdOnly:
+        return RequirementIdOnly.model_validate(self.model_dump())
+
 
 class Tag(Base):
     name: str = Field(min_length=1, max_length=50)
     requirements: list["RequirementIdOnly"] = []
     catalogues: list["CatalogueIdOnly"] = []
+
+    def toIdOnly(self) -> TagIdOnly:
+        return TagIdOnly.model_validate(self.model_dump())
 
 
 class Topic(Base):
@@ -64,12 +70,18 @@ class Topic(Base):
     description: str = Field(min_length=1)
     parentId: int | None = None
 
+    def toIdOnly(self) -> TopicIdOnly:
+        return TopicIdOnly.model_validate(self.model_dump())
+
 
 class Catalogue(Base):
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1)
     topics: list["TopicIdOnly"] = []
     tags: list["TagIdOnly"] = []
+
+    def toIdOnly(self) -> CatalogueIdOnly:
+        return CatalogueIdOnly.model_validate(self.model_dump())
 
 
 class Comment(Base):

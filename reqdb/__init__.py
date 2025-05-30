@@ -29,6 +29,11 @@ class ReqDB:
             return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
 
         @classmethod
+        def find(cls, query: str) -> list[Tag]:
+            data = ReqDB.api.get(f"{cls.endpoint}/find?query={query}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
         def all(cls) -> list[Tag]:
             data = ReqDB.api.get(f"{cls.endpoint}")
             return [cls.model.model_validate(d) for d in data]
@@ -54,6 +59,11 @@ class ReqDB:
         @classmethod
         def get(cls, id: int) -> Topic:
             return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
+
+        @classmethod
+        def find(cls, query: str) -> list[Topic]:
+            data = ReqDB.api.get(f"{cls.endpoint}/find?query={query}")
+            return [cls.model.model_validate(d) for d in data]
 
         @classmethod
         def all(cls) -> list[Topic]:
@@ -83,6 +93,11 @@ class ReqDB:
             return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
 
         @classmethod
+        def find(cls, query: str) -> list[Requirement]:
+            data = ReqDB.api.get(f"{cls.endpoint}/find?query={query}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
         def all(cls) -> list[Requirement]:
             data = ReqDB.api.get(f"{cls.endpoint}")
             return [cls.model.model_validate(d) for d in data]
@@ -108,6 +123,11 @@ class ReqDB:
         @classmethod
         def get(cls, id: int) -> ExtraType:
             return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
+
+        @classmethod
+        def find(cls, query: str) -> list[ExtraType]:
+            data = ReqDB.api.get(f"{cls.endpoint}/find?query={query}")
+            return [cls.model.model_validate(d) for d in data]
 
         @classmethod
         def all(cls) -> list[ExtraType]:
@@ -137,6 +157,11 @@ class ReqDB:
             return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
 
         @classmethod
+        def find(cls, query: str) -> list[ExtraEntry]:
+            data = ReqDB.api.get(f"{cls.endpoint}/find?query={query}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
         def all(cls) -> list[ExtraEntry]:
             data = ReqDB.api.get(f"{cls.endpoint}")
             return [cls.model.model_validate(d) for d in data]
@@ -164,6 +189,11 @@ class ReqDB:
             return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
 
         @classmethod
+        def find(cls, query: str) -> list[Catalogue]:
+            data = ReqDB.api.get(f"{cls.endpoint}/find?query={query}")
+            return [cls.model.model_validate(d) for d in data]
+
+        @classmethod
         def all(cls) -> list[Catalogue]:
             data = ReqDB.api.get(f"{cls.endpoint}")
             return [cls.model.model_validate(d) for d in data]
@@ -189,6 +219,11 @@ class ReqDB:
         @classmethod
         def get(cls, id: int) -> Comment:
             return cls.model.model_validate(ReqDB.api.get(f"{cls.endpoint}/{id}"))
+
+        @classmethod
+        def find(cls, query: str) -> list[Comment]:
+            data = ReqDB.api.get(f"{cls.endpoint}/find?query={query}")
+            return [cls.model.model_validate(d) for d in data]
 
         @classmethod
         def all(cls) -> list[Comment]:
