@@ -75,6 +75,7 @@ class Topic(Base):
 
 
 class Catalogue(Base):
+    key: str = Field(min_length=1, max_length=20)
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1)
     topics: list["TopicIdOnly"] = []
