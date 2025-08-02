@@ -1,18 +1,34 @@
-from pydantic import BaseModel
 import requests
+from authlib.integrations.requests_client import OAuth2Session
+from pydantic import BaseModel
 
 
 class API:
 
-    def __init__(self, fqdn: str, bearer: str, insecure: bool = False) -> None:
-        self.fqdn = fqdn
-        self.headers = {
-            "Authorization": f"Bearer {bearer}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        }
-        s = "s" if not insecure else ""
-        self.baseURL = f"http{s}://{self.fqdn}/api"
+    def __init__(
+        self,
+        fqdn: str,
+        scope,
+        clientId: str,
+        clientSecret: str,
+        tokenEndpoint: str,
+        insecure: bool = False,
+    ) -> None:
+        self.baseURL = f"http{"s" if not insecure else ""}://{fqdn}/api"
+
+        self.session = OAuth2Session(
+            clientId,
+            clientSecret,
+            scope=scope,
+            headers={
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+        )
+        self.session.fetch_token(tokenEndpoint)
+
+    def __del__(self) -> None:
+        self.session.close()
 
     @staticmethod
     def handleResponse(response: requests.Response) -> tuple[bool, dict]:
@@ -24,13 +40,12 @@ class API:
             raise RuntimeError(response.json())
 
     def get(self, endpoint: str) -> dict:
-        response = requests.get(f"{self.baseURL}/{endpoint}", headers=self.headers)
+        response: requests.Response = self.session.get(f"{self.baseURL}/{endpoint}")
         return API.handleResponse(response)[1]
 
     def update(self, endpoint: str, data: BaseModel) -> dict:
-        response = requests.patch(
+        response: requests.Response = self.session.patch(
             f"{self.baseURL}/{endpoint}",
-            headers=self.headers,
             json=data.model_dump(exclude_none=True, exclude_defaults=True),
         )
         return API.handleResponse(response)[1]
@@ -43,15 +58,14 @@ class API:
             parameters += "?force=true"
             if cascade:
                 parameters += "&cascade=true"
-        response = requests.delete(
-            f"{self.baseURL}/{endpoint}{parameters}", headers=self.headers
+        response: requests.Response = self.session.delete(
+            f"{self.baseURL}/{endpoint}{parameters}",
         )
         return API.handleResponse(response)[0]
 
     def add(self, endpoint: str, data: BaseModel) -> dict:
-        response = requests.post(
+        response: requests.Response = self.session.post(
             f"{self.baseURL}/{endpoint}",
-            headers=self.headers,
             json=data.model_dump(exclude_none=True, exclude_defaults=True),
         )
         return API.handleResponse(response)[1]

@@ -17,8 +17,16 @@ class ReqDB:
 
     api: API
 
-    def __init__(self, fqdn, bearer, insecure: bool = False) -> None:
-        ReqDB.api = API(fqdn, bearer, insecure)
+    def __init__(
+        self,
+        fqdn: str,
+        scope,
+        clientId: str,
+        clientSecret: str,
+        tokenEndpoint: str,
+        insecure: bool = False,
+    ) -> None:
+        ReqDB.api = API(fqdn, scope, clientId, clientSecret, tokenEndpoint, insecure)
 
     class Tags:
         endpoint: str = "tags"
