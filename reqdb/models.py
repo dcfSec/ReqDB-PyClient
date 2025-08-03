@@ -99,3 +99,8 @@ class User(BaseModel):
     active: bool = True
     notificationMailOnCommentChain: bool = False
     notificationMailOnRequirementComment: bool = False
+
+
+class ServiceUser(BaseModel):
+    id: str = ""
+    email: str | None = None

@@ -3,18 +3,38 @@ from authlib.integrations.requests_client import OAuth2Session
 from pydantic import BaseModel
 
 
-class API:
+class Auth:
+
+    def getSession(self) -> requests.Session:
+        raise NotImplemented
+
+
+class AccessTokenAuth(Auth):
+
+    def __init__(self, token: str) -> None:
+        super().__init__()
+
+        self.session = requests.Session()
+        self.session.headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authentication": f"Bearer {token}",
+        }
+
+    def getSession(self) -> requests.Session:
+        return self.session
+
+
+class OAuthClientAuth(Auth):
 
     def __init__(
         self,
-        fqdn: str,
-        scope,
+        scope: str,
         clientId: str,
         clientSecret: str,
         tokenEndpoint: str,
-        insecure: bool = False,
     ) -> None:
-        self.baseURL = f"http{"s" if not insecure else ""}://{fqdn}/api"
+        super().__init__()
 
         self.session = OAuth2Session(
             clientId,
@@ -26,6 +46,22 @@ class API:
             },
         )
         self.session.fetch_token(tokenEndpoint)
+
+    def getSession(self) -> requests.Session:
+        return self.session
+
+
+class API:
+
+    def __init__(
+        self,
+        fqdn: str,
+        auth: Auth,
+        insecure: bool = False,
+    ) -> None:
+        self.baseURL = f"http{"s" if not insecure else ""}://{fqdn}/api"
+
+        self.session: requests.Session = auth.getSession()
 
     def __del__(self) -> None:
         self.session.close()

@@ -1,12 +1,12 @@
-from reqdb.api import API
+from reqdb.api import API, Auth
 from reqdb.models import (
-    Base,
     Catalogue,
     Comment,
     Configuration,
     ExtraEntry,
     ExtraType,
     Requirement,
+    ServiceUser,
     Tag,
     Topic,
     User,
@@ -20,13 +20,10 @@ class ReqDB:
     def __init__(
         self,
         fqdn: str,
-        scope,
-        clientId: str,
-        clientSecret: str,
-        tokenEndpoint: str,
+        auth: Auth,
         insecure: bool = False,
     ) -> None:
-        ReqDB.api = API(fqdn, scope, clientId, clientSecret, tokenEndpoint, insecure)
+        ReqDB.api = API(fqdn, auth, insecure)
 
     class Tags:
         endpoint: str = "tags"
@@ -313,3 +310,17 @@ class ReqDB:
         @classmethod
         def update(cls, data: User) -> User:
             return cls.model.model_validate(ReqDB.api.update(f"{cls.endpoint}", data))
+
+    class ServiceIdentity:
+        endpoint: str = "/config/service/identity"
+        model = ServiceUser
+
+        @classmethod
+        def update(cls, id: int, data: ServiceUser) -> ServiceUser:
+            return cls.model.model_validate(
+                ReqDB.api.update(f"{cls.endpoint}/{id}", data)
+            )
+
+        @classmethod
+        def add(cls, data: ServiceUser) -> ServiceUser:
+            return cls.model.model_validate(ReqDB.api.add(f"{cls.endpoint}", data))
