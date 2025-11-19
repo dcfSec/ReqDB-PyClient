@@ -18,7 +18,7 @@ class AccessTokenAuth(Auth):
         self.session.headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authentication": f"Bearer {token}",
+            "Authorization": f"Bearer {token}",
         }
 
     def getSession(self) -> requests.Session:
