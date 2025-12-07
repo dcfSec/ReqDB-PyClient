@@ -311,9 +311,14 @@ class ReqDB:
         def update(cls, data: User) -> User:
             return cls.model.model_validate(ReqDB.api.update(f"{cls.endpoint}", data))
 
-    class ServiceIdentity:
-        endpoint: str = "/config/service/identity"
+    class ServiceUser:
+        endpoint: str = "/config/service/users"
         model = ServiceUser
+
+        @classmethod
+        def all(cls) -> list[ServiceUser]:
+            data = ReqDB.api.get(f"{cls.endpoint}")
+            return [cls.model.model_validate(d) for d in data]
 
         @classmethod
         def update(cls, id: int, data: ServiceUser) -> ServiceUser:
@@ -324,3 +329,7 @@ class ReqDB:
         @classmethod
         def add(cls, data: ServiceUser) -> ServiceUser:
             return cls.model.model_validate(ReqDB.api.add(f"{cls.endpoint}", data))
+
+        @classmethod
+        def delete(cls, id: int) -> bool:
+            return ReqDB.api.delete(f"{cls.endpoint}/{id}")
